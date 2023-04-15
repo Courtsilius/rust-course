@@ -28,8 +28,19 @@ mod test {
     fn test_my_programme_1() {
         let mut test_slice = ["foo", "1"]; // slice mit fixer groesse ( =/= vector)
 
+        /*
         // generate heap allocated vector
-        let heap_alloc_vec = test_slice.into_iter().map(|s| String::from(s)).collect();
+        let heap_alloc_vec = test_slice.
+            into_iter()
+            .map(|s| String::from(s))
+            .collect(); // <- erst hier wird vector gebaut, inferiert durch programm() dass es sich um einen vec handelt
+        */
+        // closure in ap wegoptimieren :
+        // generate heap allocated vector
+        let heap_alloc_vec = test_slice.
+            into_iter()
+            .map(String::from)
+            .collect(); // <- erst hier wird vector gebaut, inferiert durch programm() dass es sich um einen vec handelt
 
         programm(heap_alloc_vec);
     }
