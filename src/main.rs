@@ -19,6 +19,20 @@ fn programm(args: Vec<String>) {
     println!("{x}")
 }
 
+
+#[test]
+fn test_my_programme_1() {
+    let test_vec = vec![String::from("foo"), String::from("1")];
+    programm(test_vec);
+}
+
+#[test]
+fn test_my_programme_42() {
+    let test_vec = vec![String::from("foo"), String::from("42")];
+    programm(test_vec);
+}
+
+
 fn main() {
     let args = std::env::args().collect();
     programm(args);
