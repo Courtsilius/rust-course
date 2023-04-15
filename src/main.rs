@@ -27,9 +27,11 @@ fn test_my_programme_1() {
 }
 
 #[test]
+#[should_panic]
 fn test_my_programme_42() {
     let test_vec = vec![String::from("foo"), String::from("42")];
     programm(test_vec);
+    panic!("at the disco")
 }
 
 
