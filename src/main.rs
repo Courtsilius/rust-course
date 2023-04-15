@@ -1,10 +1,13 @@
+use std::env;
+use std::str::FromStr;
+
 fn main() {
-    let mut x = 0;
-    loop  {
-        if x > 10 {
-            break;
-        }
-        println!("{x}");
-        x = x + 1 ;
+    let s = "1";
+
+    let a = i32::from_str(s);
+    let kek = env::args();
+    for argument in kek {
+        println!("{argument}");
     }
 }
+
