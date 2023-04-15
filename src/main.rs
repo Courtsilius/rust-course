@@ -20,20 +20,28 @@ fn programm(args: Vec<String>) {
 }
 
 
-#[test]
-fn test_my_programme_1() {
-    let test_vec = vec![String::from("foo"), String::from("1")];
-    programm(test_vec);
-}
+#[cfg(test)]
+mod test {
+    use super::programm;
 
-#[test]
-#[should_panic]
-fn test_my_programme_42() {
-    let test_vec = vec![String::from("foo"), String::from("42")];
-    programm(test_vec);
-    panic!("at the disco")
-}
+    #[test]
+    fn test_my_programme_1() {
+        let mut test_slice = ["foo", "1"]; // slice mit fixer groesse ( =/= vector)
 
+        // generate heap allocated vector
+        let heap_alloc_vec = test_slice.into_iter().map(|s| String::from(s)).collect();
+
+        programm(heap_alloc_vec);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_my_programme_42() {
+        let test_vec = vec![String::from("foo"), String::from("42")];
+        programm(test_vec);
+        panic!("at the disco")
+    }
+}
 
 fn main() {
     let args = std::env::args().collect();
