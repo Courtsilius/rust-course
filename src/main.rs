@@ -1,9 +1,10 @@
 use std::str::FromStr;
 
-fn boo() -> i32 {
-    std::env::args()
+fn boo(args: Vec<String>) -> i32 {
+    args
+        .iter()
         .nth(1)
-        .map(|s: String| {
+        .map(|s: &String| {
             i32::from_str(&s)
         })
         .unwrap_or(Ok(0))
@@ -13,10 +14,14 @@ fn boo() -> i32 {
         })
 }
 
-fn main() {
-    let x = boo();
-    println!("{x}");
+fn programm(args: Vec<String>) {
+    let x = boo(args);
+    println!("{x}")
+}
 
+fn main() {
+    let args = std::env::args().collect();
+    programm(args);
     //let mut kek = std::env::args();
     //let first = kek.nth(1).unwrap_or_else(|| {
     //    String::from("0")
