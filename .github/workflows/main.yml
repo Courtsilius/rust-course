@@ -5,7 +5,7 @@ name: CI
 
 jobs:
   build_and_test:
-    name: Check
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -49,6 +49,6 @@ jobs:
     needs:
       - Clippy
       - Format
-      - Check
+      - Build
     steps:
       - exit 0
