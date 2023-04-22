@@ -51,4 +51,4 @@ jobs:
       - fmt
       - build_and_test
     steps:
-      - exit 0
+      - run: exit 0
