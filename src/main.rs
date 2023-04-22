@@ -24,8 +24,7 @@ fn main() {
 fn get_f64_from_input() -> f64 {
     let mut buffer = String::new();
     match io::stdin().read_line(&mut buffer) {
-        Ok(_n) => {
-        }
+        Ok(_n) => {}
         Err(error) => panic!("error: {error}"),
     };
     f64::from_str(buffer.trim()).unwrap()
