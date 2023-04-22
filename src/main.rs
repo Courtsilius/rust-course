@@ -19,6 +19,7 @@ fn main() {
 
     println!("Bitte Größe eingeben (in cm): ");
     let height: Height = Height(get_f64_from_input(&mut stdin) / 100.0);
+    drop(stdin);
 
     // kg / m^2 = BMI
     let bmi = bmi(height, weight);
