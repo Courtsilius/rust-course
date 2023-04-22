@@ -22,7 +22,7 @@ fn main() {
 
     // kg / m^2 = BMI
     let bmi = bmi(height, weight);
-    let = 
+    let =
     println!("Dein BMI: {}", bmi.0);
 }
 
