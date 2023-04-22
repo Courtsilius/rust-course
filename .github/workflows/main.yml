@@ -5,7 +5,7 @@ name: CI
 
 jobs:
   build_and_test:
-    name: Build
+    name: Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -41,3 +41,14 @@ jobs:
         with:
           command: clippy
           args: -- -D warnings
+
+  ci:
+    name: CI
+    if: ${{ success() }}
+    runs-on: ubuntu-latest
+    needs:
+      - Clippy
+      - Format
+      - Check
+    steps:
+      - exit 0
