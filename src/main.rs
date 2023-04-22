@@ -9,10 +9,10 @@ fn main() {
     let mut stdin = std::io::stdin();
 
     println!("Bitte Gewicht eingeben (in kg): ");
-    let mut weight:f64 = get_f64_from_input(&mut stdin);
+    let weight:f64 = get_f64_from_input(&mut stdin);
 
     println!("Bitte Größe eingeben (in cm): ");
-    let mut height = get_f64_from_input(&mut stdin) / 100.0;
+    let height = get_f64_from_input(&mut stdin) / 100.0;
 
     // kg / m^2 = BMI
     let bmi = bmi(height, weight);
