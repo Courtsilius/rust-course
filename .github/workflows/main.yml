@@ -47,8 +47,8 @@ jobs:
     if: ${{ success() }}
     runs-on: ubuntu-latest
     needs:
-      - Clippy
-      - Format
-      - Build
+      - clippy
+      - fmt
+      - build_and_test
     steps:
       - exit 0
