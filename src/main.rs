@@ -1,5 +1,3 @@
-use std::f32;
-use std::io;
 use std::io::Stdin;
 use std::io::Write;
 use std::str::FromStr;
