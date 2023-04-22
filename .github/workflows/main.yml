@@ -17,6 +17,7 @@ jobs:
         with:
           command: check
 
+
   fmt:
     name: Format
     runs-on: ubuntu-latest
