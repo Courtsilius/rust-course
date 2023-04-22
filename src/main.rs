@@ -1,94 +1,32 @@
+use std::f32;
 use std::str::FromStr;
+use std::io;
+use std::io::Write;
+use std::io::Stdin;
 
-fn boo(args: Vec<String>) -> i32 {
-    args
-        .iter()
-        .nth(1)
-        .map(|s: &String| {
-            i32::from_str(&s)
-        })
-        .unwrap_or(Ok(0))
-        .unwrap_or_else(|err| {
-            eprintln!("Error while parsing: {}", err);
-            0
-        })
-}
-
-fn programm(args: Vec<String>) {
-    let x = boo(args);
-    println!("{x}")
-}
-
-
-#[cfg(test)]
-mod test {
-    use super::programm;
-
-    #[test]
-    fn test_my_programme_1() {
-        let mut test_slice = ["foo", "1"]; // slice mit fixer groesse ( =/= vector)
-
-        /*
-        // generate heap allocated vector
-        let heap_alloc_vec = test_slice.
-            into_iter()
-            .map(|s| String::from(s))
-            .collect(); // <- erst hier wird vector gebaut, inferiert durch programm() dass es sich um einen vec handelt
-        */
-        // closure in ap wegoptimieren :
-        // generate heap allocated vector
-        let heap_alloc_vec = test_slice.
-            into_iter()
-            .map(String::from)
-            .collect(); // <- erst hier wird vector gebaut, inferiert durch programm() dass es sich um einen vec handelt
-
-        programm(heap_alloc_vec);
-    }
-
-    #[test]
-    #[should_panic]
-    fn test_my_programme_42() {
-        let test_vec = vec![String::from("foo"), String::from("42")];
-        programm(test_vec);
-        panic!("at the disco")
-    }
-}
-
+// BMI calculator
 fn main() {
-    let args = std::env::args().collect();
-    programm(args);
-    //let mut kek = std::env::args();
-    //let first = kek.nth(1).unwrap_or_else(|| {
-    //    String::from("0")
-    //});
-    // println!("{first}");
+    let mut stdin = std::io::stdin();
 
-    /*
+    println!("Bitte Gewicht eingeben (in kg): ");
+    let mut weight:f64 = get_f64_from_input(&mut stdin);
 
+    println!("Bitte Größe eingeben (in cm): ");
+    let mut height = get_f64_from_input(&mut stdin) / 100.0;
 
-    let f = std::env::args()
-        .nth(1)
-        .map(|s: String| {
-            i32::from_str(&s)
-        })
-        .unwrap_or(Ok(0))
-        .unwrap_or_else(|err| {
-            eprintln!("Error while parsing: {}", err);
-            0
-        });
+    // kg / m^2 = BMI
+    let bmi = bmi(height, weight);
 
-    println!("{f}");
-
-     */
-
-    /*
-    //list
-    let mut list = Vec::new();
-    list.push(1);
-
-    for elem in list.iter() {
-        println!("{elem}");
-    }
-    */
+    println!("Dein BMI: {}",bmi);
 }
 
+fn get_f64_from_input(stdin:&Stdin) -> f64 {
+    let mut buffer_height = String::new();
+    stdin.read_line(&mut buffer_height);
+    f64::from_str(buffer_height.trim()).unwrap()
+}
+
+// calculates bmi based on height and weight
+fn bmi(height:f64, weight:f64) -> f64 {
+    weight / (f64::powf(height, 2.0))
+}
