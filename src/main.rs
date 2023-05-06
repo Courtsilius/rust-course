@@ -26,7 +26,7 @@ fn main() {
     let bmi = calculate_bmi(height, weight);
     match bmi {
         Ok(bmi) => println!("Dein BMI: {}", bmi.value()),
-        Err(e) => println!("<insert insult here>"),
+        Err(_e) => println!("Get rekt"),
     }
 }
 

@@ -6,6 +6,10 @@ pub mod bmi_mod {
             return Err(BmiError::HeightCannotBeZeroOrSmaller);
         }
 
+        if weight.0 <= 0.0 {
+            return Err(BmiError::WeightCannotBeZeroOrSmaller);
+        }
+
         let bmi = weight.0 / (f64::powf(height.0, 2.0));
         Ok(Bmi::new(bmi))
     }
