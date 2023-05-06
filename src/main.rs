@@ -59,7 +59,7 @@ fn main() {
             log::debug!("Opened or created file successfully");
             file
         }
-        Error(e) => {
+        Err(e) => {
             log::error!("error creating oropening file: {e:?}");
             std::process::exit(1)
         }
