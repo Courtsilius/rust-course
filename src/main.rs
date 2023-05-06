@@ -7,6 +7,11 @@ struct Height(f64);
 
 struct Bmi(f64);
 
+#[derive(Debug)]
+enum BmiError {
+    HeightCannotBeZeroOrSmaller,
+}
+
 // BMI calculator
 fn main() {
     println!("Bitte Gewicht eingeben (in kg): ");
@@ -16,9 +21,11 @@ fn main() {
     let height: Height = Height(get_f64_from_input() / 100.0);
 
     // kg / m^2 = BMI
-    let bmi = bmi(height, weight).unwrap();
-
-    println!("Dein BMI: {}", bmi.0);
+    let bmi = bmi(height, weight);
+    match bmi {
+        Ok(Bmi(val)) => println!("Dein BMI: {}", val),
+        Err(e) => println!("<insert insult here>"),
+    }
 }
 
 fn get_f64_from_input() -> f64 {
@@ -31,12 +38,13 @@ fn get_f64_from_input() -> f64 {
 }
 
 // calculates bmi based on height and weight
-fn bmi(height: Height, weight: Weight) -> Option<Bmi> {
+fn bmi(height: Height, weight: Weight) -> Result<Bmi, BmiError> {
     if height.0 <= 0.0 {
-        return None;
+        return Err(BmiError::HeightCannotBeZeroOrSmaller);
     }
+
     let bmi = weight.0 / (f64::powf(height.0, 2.0));
-    Some(Bmi(bmi))
+    Ok(Bmi(bmi))
 }
 
 #[test]
@@ -45,9 +53,8 @@ fn test_bmi() {
     assert_eq!(result.0, 24.158817968558527)
 }
 
-
 #[test]
 fn test_bmi_fail() {
     let opt = bmi(Height(0.0), Weight(1.69));
-    assert!(opt.is_none());
+    assert!(opt.is_err());
 }
