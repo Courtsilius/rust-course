@@ -2,17 +2,17 @@ use std::io;
 use std::str::FromStr;
 
 use crate::bmi::Bmi;
+use crate::bmi_functions::bmi_mod::calculate_bmi;
+use crate::error::BmiError;
 use crate::height::Height;
 use crate::weight::Weight;
-use crate::error::BmiError;
-use crate::bmi_functions::bmi_mod::calculate_bmi;
 
-mod weight;
-mod height;
 mod bmi;
-mod error;
 mod bmi_functions;
+mod error;
+mod height;
 mod tests;
+mod weight;
 
 // BMI calculator
 fn main() {

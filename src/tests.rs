@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use crate::{calculate_bmi, Weight, Height, BmiError};
+    use crate::{calculate_bmi, BmiError, Height, Weight};
     use float_eq::assert_float_eq;
 
     #[test]
