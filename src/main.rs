@@ -1,5 +1,4 @@
-use std::io;
-use std::str::FromStr;
+use inquire::CustomType;
 
 use crate::bmi::Bmi;
 use crate::bmi_functions::bmi_mod::calculate_bmi;
@@ -16,11 +15,32 @@ mod weight;
 
 // BMI calculator
 fn main() {
-    println!("Bitte Gewicht eingeben (in kg): ");
-    let weight: Weight = Weight(get_f64_from_input());
+    env_logger::init();
 
-    println!("Bitte Größe eingeben (in cm): ");
-    let height: Height = Height(get_f64_from_input() / 100.0);
+    let weight_input = CustomType::<f64>::new("Bitte Gewicht eingeben (in kg): ")
+        .with_formatter(&|i| format!("{:.2}kg", i))
+        .with_error_message("Please type a valid number")
+        .with_help_message("1 Gewicht bitte")
+        .prompt();
+
+    match weight_input {
+        Ok(weight_input) => log::debug!("User input weight: {}", weight_input),
+        Err(_) => panic!("I cant keep doing this."),
+    }
+
+    let height_input = CustomType::<f64>::new("Bitte Größe eingeben (in cm): ")
+        .with_formatter(&|i| format!("{}cm", i))
+        .with_error_message("Please type a valid number")
+        .with_help_message("1 Groß bitte in cm.")
+        .prompt();
+
+    match height_input {
+        Ok(height_input) => log::debug!("User input height: {}", height_input),
+        Err(_) => panic!("I cant keep doing this."),
+    }
+
+    let weight = Weight(weight_input.unwrap());
+    let height: Height = Height(height_input.unwrap() / 100.0);
 
     // kg / m^2 = BMI
     let bmi = calculate_bmi(height, weight);
@@ -28,13 +48,4 @@ fn main() {
         Ok(bmi) => println!("Dein BMI: {}", bmi.value()),
         Err(_e) => println!("Get rekt"),
     }
-}
-
-fn get_f64_from_input() -> f64 {
-    let mut buffer = String::new();
-    match io::stdin().read_line(&mut buffer) {
-        Ok(_n) => {}
-        Err(error) => panic!("error: {error}"),
-    };
-    f64::from_str(buffer.trim()).unwrap()
 }
