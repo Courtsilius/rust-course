@@ -1,4 +1,6 @@
 use inquire::CustomType;
+use std::fs::File;
+use std::io::Write;
 
 use crate::bmi::Bmi;
 use crate::bmi_functions::bmi_mod::calculate_bmi;
@@ -40,12 +42,27 @@ fn main() {
     }
 
     let weight = Weight(weight_input.unwrap());
-    let height: Height = Height(height_input.unwrap() / 100.0);
+    let height = Height(height_input.unwrap() / 100.0);
 
     // kg / m^2 = BMI
     let bmi = calculate_bmi(height, weight);
     match bmi {
-        Ok(bmi) => println!("Dein BMI: {}", bmi.value()),
-        Err(_e) => println!("Get rekt"),
+        Ok(ref bmi) => println!("Dein BMI: {}", bmi.value()),
+        Err(_e) => panic!("Get rekt"),
     }
+
+    let mut file = match File::options()
+        .create(true)
+        .append(true)
+        .open("example.log") {
+        Ok(file) => {
+            log::debug!("Opened or created file successfully");
+            file
+        }
+        Error(e) => {
+            log::error!("error creating oropening file: {e:?}");
+            std::process::exit(1)
+        }
+    };
+    writeln!(&mut file, "{}", bmi.unwrap().value());
 }
