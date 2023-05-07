@@ -54,7 +54,8 @@ fn main() {
     let mut file = match File::options()
         .create(true)
         .append(true)
-        .open("example.log") {
+        .open("example.log")
+    {
         Ok(file) => {
             log::debug!("Opened or created file successfully");
             file
@@ -64,5 +65,5 @@ fn main() {
             std::process::exit(1)
         }
     };
-    writeln!(&mut file, "{}", bmi.unwrap().value());
+    writeln!(&mut file, "{}", bmi.unwrap().value()).unwrap();
 }
