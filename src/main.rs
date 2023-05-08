@@ -1,37 +1,69 @@
-use std::io;
-use std::str::FromStr;
+use inquire::CustomType;
+use std::fs::File;
+use std::io::Write;
 
-struct Weight(f64);
+use crate::bmi::Bmi;
+use crate::bmi_functions::bmi_mod::calculate_bmi;
+use crate::error::BmiError;
+use crate::height::Height;
+use crate::weight::Weight;
 
-struct Height(f64);
-
-struct Bmi(f64);
+mod bmi;
+mod bmi_functions;
+mod error;
+mod height;
+mod tests;
+mod weight;
 
 // BMI calculator
 fn main() {
-    println!("Bitte Gewicht eingeben (in kg): ");
-    let weight: Weight = Weight(get_f64_from_input());
+    env_logger::init();
 
-    println!("Bitte Größe eingeben (in cm): ");
-    let height: Height = Height(get_f64_from_input() / 100.0);
+    let weight_input = CustomType::<f64>::new("Bitte Gewicht eingeben (in kg): ")
+        .with_formatter(&|i| format!("{:.2}kg", i))
+        .with_error_message("Please type a valid number")
+        .with_help_message("1 Gewicht bitte")
+        .prompt();
+
+    match weight_input {
+        Ok(weight_input) => log::debug!("User input weight: {}", weight_input),
+        Err(_) => panic!("I cant keep doing this."),
+    }
+
+    let height_input = CustomType::<f64>::new("Bitte Größe eingeben (in cm): ")
+        .with_formatter(&|i| format!("{}cm", i))
+        .with_error_message("Please type a valid number")
+        .with_help_message("1 Groß bitte in cm.")
+        .prompt();
+
+    match height_input {
+        Ok(height_input) => log::debug!("User input height: {}", height_input),
+        Err(_) => panic!("I cant keep doing this."),
+    }
+
+    let weight = Weight(weight_input.unwrap());
+    let height = Height(height_input.unwrap() / 100.0);
 
     // kg / m^2 = BMI
-    let bmi = bmi(height, weight);
+    let bmi = calculate_bmi(height, weight);
+    match bmi {
+        Ok(ref bmi) => println!("Dein BMI: {}", bmi.value()),
+        Err(_e) => panic!("Get rekt"),
+    }
 
-    println!("Dein BMI: {}", bmi.0);
-}
-
-fn get_f64_from_input() -> f64 {
-    let mut buffer = String::new();
-    match io::stdin().read_line(&mut buffer) {
-        Ok(_n) => {}
-        Err(error) => panic!("error: {error}"),
+    let mut file = match File::options()
+        .create(true)
+        .append(true)
+        .open("example.log")
+    {
+        Ok(file) => {
+            log::debug!("Opened or created file successfully");
+            file
+        }
+        Err(e) => {
+            log::error!("error creating oropening file: {e:?}");
+            std::process::exit(1)
+        }
     };
-    f64::from_str(buffer.trim()).unwrap()
-}
-
-// calculates bmi based on height and weight
-fn bmi(height: Height, weight: Weight) -> Bmi {
-    let bmi = weight.0 / (f64::powf(height.0, 2.0));
-    Bmi(bmi)
+    writeln!(&mut file, "{}", bmi.unwrap().value()).unwrap();
 }
