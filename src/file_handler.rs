@@ -1,18 +1,17 @@
 pub mod file_handler_mod {
-    use std::time::SystemTime;
     use std::fs::File;
     use std::io::Write;
+    use std::time::SystemTime;
 
     use serde_json::json;
 
     use crate::bmi::Bmi;
 
-    fn now() -> u64{
-        let r = match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
+    fn now() -> u64 {
+        match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
             Ok(n) => n.as_secs(),
             Err(_) => panic!("SystemTime before UNIX EPOCH!"),
-        };
-        r
+        }
     }
 
     pub fn save(bmi: Bmi) {
@@ -30,7 +29,12 @@ pub mod file_handler_mod {
                 std::process::exit(1)
             }
         };
-        let output_string = serde_json::to_string(&bmi);
-        writeln!(&mut file, "{}", output_string.unwrap());
+        let output_string = json!({
+            "bmi": bmi.value(),
+            "height": bmi.height().0,
+            "weight": bmi.weight().0,
+            "time": now(),
+        });
+        writeln!(&mut file, "{}", output_string).unwrap();
     }
 }

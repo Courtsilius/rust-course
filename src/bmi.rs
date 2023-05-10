@@ -16,6 +16,18 @@ impl Bmi {
     }
 
     pub fn new(bmi: f64, height: Height, weight: Weight) -> Bmi {
-        Bmi { value: bmi, height: height, weight: weight}
+        Bmi {
+            value: bmi,
+            height,
+            weight,
+        }
+    }
+
+    pub fn height(&self) -> Height {
+        self.height
+    }
+
+    pub fn weight(&self) -> Weight {
+        self.weight
     }
 }

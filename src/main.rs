@@ -1,20 +1,19 @@
 use inquire::CustomType;
 
-
 use crate::bmi::Bmi;
 use crate::bmi_functions::bmi_mod::calculate_bmi;
 use crate::error::BmiError;
+use crate::file_handler::file_handler_mod::save;
 use crate::height::Height;
 use crate::weight::Weight;
-use crate::file_handler::file_handler_mod::save;
 
 mod bmi;
 mod bmi_functions;
 mod error;
+mod file_handler;
 mod height;
 mod tests;
 mod weight;
-mod file_handler;
 
 // BMI calculator
 fn main() {
