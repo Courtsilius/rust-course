@@ -11,6 +11,6 @@ pub mod bmi_mod {
         }
 
         let bmi = weight.0 / (f64::powf(height.0, 2.0));
-        Ok(Bmi::new(bmi))
+        Ok(Bmi::new(bmi, height, weight))
     }
 }

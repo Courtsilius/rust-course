@@ -1,6 +1,13 @@
-#[derive(Debug)]
+use serde::{Deserialize, Serialize};
+
+use crate::height::Height;
+use crate::weight::Weight;
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Bmi {
     value: f64,
+    height: Height,
+    weight: Weight,
 }
 
 impl Bmi {
@@ -8,7 +15,7 @@ impl Bmi {
         self.value
     }
 
-    pub fn new(bmi: f64) -> Bmi {
-        Bmi { value: bmi }
+    pub fn new(bmi: f64, height: Height, weight: Weight) -> Bmi {
+        Bmi { value: bmi, height: height, weight: weight}
     }
 }
