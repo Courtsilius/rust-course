@@ -6,6 +6,7 @@ pub mod file_handler_mod {
     use serde_json::json;
 
     use crate::bmi::Bmi;
+    use crate::json_entry::Bmi_Entry;
 
     fn now() -> u64 {
         match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
@@ -25,16 +26,20 @@ pub mod file_handler_mod {
                 file
             }
             Err(e) => {
-                log::error!("error creating or opening file: {e:?}");
+                log::error!("Error creating or opening file: {e:?}");
                 std::process::exit(1)
             }
         };
-        let output_string = json!({
-            "bmi": bmi.value(),
-            "height": bmi.height().0,
-            "weight": bmi.weight().0,
-            "time": now(),
-        });
-        writeln!(&mut file, "{}", output_string).unwrap();
+
+        let data = Bmi_Entry::new(bmi, now());
+        let output = serde_json::to_string(&data).unwrap();
+        writeln!(&mut file, "{}", output).unwrap();
     }
+
+    pub async fn read_file() -> String {
+        todo!()
+    }
+
 }
+
+

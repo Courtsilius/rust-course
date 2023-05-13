@@ -1,9 +1,12 @@
 use inquire::CustomType;
+use clap::Parser;
+use tokio;
 
 use crate::bmi::Bmi;
 use crate::bmi_functions::bmi_mod::calculate_bmi;
 use crate::error::BmiError;
 use crate::file_handler::file_handler_mod::save;
+use crate::file_handler::file_handler_mod::read_file;
 use crate::height::Height;
 use crate::weight::Weight;
 
@@ -14,10 +17,14 @@ mod file_handler;
 mod height;
 mod tests;
 mod weight;
+mod json_entry;
 
 // BMI calculator
-fn main() {
+#[tokio::main]
+async fn main() {
     env_logger::init();
+    let cont = read_file().await;
+
 
     let weight_input = CustomType::<f64>::new("Bitte Gewicht eingeben (in kg): ")
         .with_formatter(&|i| format!("{:.2}kg", i))
@@ -42,7 +49,7 @@ fn main() {
     }
 
     let weight = Weight(weight_input.unwrap());
-    let height = Height(height_input.unwrap() / 100.0);
+    let height = Height::new(height_input.unwrap() / 100.0);
 
     // kg / m^2 = BMI
     let bmi = calculate_bmi(height, weight);
